@@ -76,6 +76,8 @@ def find_album(token, id):
                     )
     json_resp=response.json()
     # print(json_resp)
+    if json_resp['error']['status'] != 200:
+        return {'message':json_resp['error']['message'], 'success':False}
 
     album={
         'album_id':json_resp['id'],
@@ -92,6 +94,7 @@ def find_album(token, id):
     all_tracks=json_resp['tracks']['items']
     for track in all_tracks:
         track_dict={}
+        track_dict['album_id']=json_resp['id']
         track_dict['track_id']=track['id']
         track_dict['track_name']=track['name']
         track_dict['duration']=track['duration_ms']
@@ -102,7 +105,10 @@ def find_album(token, id):
 
     # print(album)
     # print(tracks)
-    return tracks
+    return {
+        'album':album,
+        'tracks':tracks
+        }
 # find_album("29njH6pDF6JE65D2VJbAxW")
 
 

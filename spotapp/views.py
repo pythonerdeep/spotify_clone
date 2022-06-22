@@ -16,6 +16,8 @@ class Album(APIView):
             album_id=request.GET.get("id")
             result=find_album(token,album_id)
             print(result)
+            if result['success'] == False:
+                return Response(result)
             return Response({"message":"Successful", "success":True,})
         except Exception as e:
             return Response({"message": str(e), "success": False})
