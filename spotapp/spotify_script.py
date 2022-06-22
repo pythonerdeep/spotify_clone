@@ -76,8 +76,8 @@ def find_album(token, id):
                     )
     json_resp=response.json()
     # print(json_resp)
-    if json_resp['error']['status'] != 200:
-        return {'message':json_resp['error']['message'], 'success':False}
+    # if json_resp['error']=='error':
+    #     return {'message':json_resp['error']['message'], 'success':False}
 
     album={
         'album_id':json_resp['id'],
