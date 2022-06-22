@@ -3,6 +3,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .spotify_script import *
 from .models import Album, Track
+import json
+from django.core import serializers
+from django.http import HttpResponse
 
 
 
@@ -29,11 +32,68 @@ class AddAlbums(APIView):
                 # print(track)
                 trac=Track.objects.create(track_id=track['track_id'], track_name=track['track_name'], duration_ms=track['duration'],
                                         artist=track['artist'], track_url=track['url'], album=ab)
-            return Response({"message":"Successful", "success":True,})
+            return Response({"message":"Albums added successfuly.", "success":True,})
         except Exception as e:
             return Response({"message": str(e), "success": False})
 
 #### end online api here #####
+
+#### API for - Find Albums and several albums##
+class FindAlbums(APIView):
+    def get(self, request):
+        try:
+            album_id=request.GET.get('id')
+            if album_id is None:
+                albums_data=Album.objects.all()
+                json_data=serializers.serialize('json', albums_data)
+                return HttpResponse(json_data, content_type='application/json')
+            album_data=Album.objects.filter(album_id=album_id)
+            json_data=serializers.serialize('json', album_data)
+            return HttpResponse(json_data, content_type='application/json')
+
+        except Exception as e:
+            return Response({"message": str(e), "success": False})
+
+##### API for - deleting Album    
+    def delete(self,request):
+        try:
+            album_id=request.data.get('album_id')
+            # print(album_id)
+            album=Album.objects.get(album_id=album_id)
+            album.delete()
+            return Response({"message":'Album deleted sucessfully.', 'success':True})
+        
+        except Exception as e:
+            return Response({"message": str(e), "success": False})
+        
+
+
+#### API for - find albums Track
+class AlbumTrack(APIView):
+    def get(self,request):
+        try:
+            album_id=request.GET.get('id')
+            tracks=Track.objects.filter(album__album_id=album_id)
+            json_data=serializers.serialize('json', tracks)
+            return HttpResponse(json_data, content_type='application/json')
+        
+        except Exception as e:
+            return Response({"message": str(e), "success": False})
+
+#### API for - find new-release
+class NewRelease(APIView):
+    def get(self,request):
+        try:
+            release=request.GET.get('is_new')
+            print(release)
+            releases=Album.objects.filter(is_new=release)
+            json_data=serializers.serialize('json', releases)
+            return HttpResponse(json_data, content_type='application/json')
+        
+        except Exception as e:
+            return Response({"message": str(e), "success": False})
+
+
 
 
 
