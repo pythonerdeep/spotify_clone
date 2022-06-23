@@ -6,6 +6,8 @@ from .models import Album, Track
 import json
 from django.core import serializers
 from django.http import HttpResponse
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 
@@ -40,6 +42,8 @@ class AddAlbums(APIView):
 
 #### API for - Find Albums and several albums##
 class FindAlbums(APIView):
+    authentication_classes=[JWTAuthentication]
+    permission_classes=[IsAuthenticated]
     def get(self, request):
         try:
             album_id=request.GET.get('id')
@@ -70,6 +74,8 @@ class FindAlbums(APIView):
 
 #### API for - find albums Track
 class AlbumTrack(APIView):
+    authentication_classes=[JWTAuthentication]
+    permission_classes=[IsAuthenticated]
     def get(self,request):
         try:
             album_id=request.GET.get('id')
@@ -82,6 +88,8 @@ class AlbumTrack(APIView):
 
 #### API for - find new-release
 class NewRelease(APIView):
+    authentication_classes=[JWTAuthentication]
+    permission_classes=[IsAuthenticated]
     def get(self,request):
         try:
             release=request.GET.get('is_new')
