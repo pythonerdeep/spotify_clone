@@ -1,0 +1,12 @@
+I have creating admin panel of this project you can access the data of saved data on admin dashboard
+admin_user= naugs
+password= 12345
+
+Firstally, I have fetching the albums data from spotify server and saved them into my db.
+
+Then after creating of another api like
+i.) Find albums and several albums
+ii.) Delete album
+iii.) Fetching album tracks
+iv.) Find new-release
+
